@@ -18,7 +18,6 @@ class TSV:
             liste = []
             # Avec iterrows on va entrer les données en  base
             for index, row in chunck.iterrows():
-                # print(len(row))
                 dic = row.to_dict()
                 liste.append(dic)
             i+= 1
