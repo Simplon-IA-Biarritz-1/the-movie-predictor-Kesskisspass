@@ -17,6 +17,7 @@ for tsv_file in list_files[0]:
 # On crée notre objet tsv de notre classe tsv en lui passant le chemin
 for name in list_names:
     tsv = TSV(name)
+    
      # On découpe nos fichiers pour les traiter sequentiellement
     liste_dic = tsv.read_seq()
 
