@@ -8,5 +8,10 @@ class DB:
         self.collection = self.dbase[collection]
 
     def add(self,data):
+        # Pour debug
+        try:
+            self.client.drop_database('tmp_mini')
+        except:
+            pass
         self.collection.insert_many(data)
 

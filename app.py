@@ -1,10 +1,16 @@
 import glob
 from tsv import TSV
 from db import DB
-from datatype import NAME_BASICS
+import datatype
 
 # On met le chemin vers les fichiers tsv_extract (pour test) dans une variable
 data_path = "./tsv_extract/*.tsv"
+
+# Taille découpage fichier
+batch_size = 100
+
+# Nom de la database
+dbname = 'tmp_mini'
 
 # On regarde le dossier tsv et on récupère la liste des noms
 # des fichiers (pour le nom des collections MongoDB)
@@ -19,17 +25,44 @@ for tsv_file in list_files[0]:
 for name in list_names:
     tsv = TSV(name)
 
-     # On découpe nos fichiers pour les traiter sequentiellement
-    liste_dic = tsv.read_seq()
+    while True:
 
-    # On nettoie les données avant de les envoyer en BDD
-    for dico in liste_dic:
-        if (name == 'name.basics.extract'):
-            dic = NAME_BASICS(dico)
-            print(dic.birthYear)
+        # On découpe nos fichiers pour les traiter sequentiellement
+        lines = tsv.read_sequential(batch_size)
 
+        if not lines:
+            break
+        
+        list_db = []
+        for line in lines:
+            if (name == 'name.basics.extract'):
+                dic = datatype.NAME_BASICS(line)
 
-    # On crée une connexion à MongoDB en créant une collection identique au nom du fichier
-    # database = DB('tmp_mini',name)
-    # database.add(liste_dic)
-    # liste_dic = []
+            elif (name == 'title.crew.extract'):
+                dic = datatype.TITLE_CREW(line)
+            
+            elif (name == 'title.ratings.extract'):
+                dic = datatype.TITLE_RATINGS(line)
+
+            elif (name == 'title.akas.extract'):
+                dic = datatype.TITLE_AKAS(line)
+
+            elif (name == 'title.basics.extract'):
+                dic = datatype.TITLE_BASICS(line)
+
+            elif (name == 'title.episode.extract'):
+                dic = datatype.TITLE_EPISODE(line)
+
+            elif (name == 'title.principals.extract'):
+                dic = datatype.TITLE_PRINCIPALS(line)
+            else:
+                print("File error")
+            list_db.append(dic.__dict__)
+
+        # print(len(list_db))
+        # On crée une connexion à MongoDB en créant une collection identique au nom du fichier
+        database = DB(dbname,name)
+        database.add(list_db)
+        list_db = []
+
+print("L'import est terminé")
