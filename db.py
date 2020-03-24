@@ -7,11 +7,12 @@ class DB:
         self.dbase = self.client[dbname]
         self.collection = self.dbase[collection]
 
-    def add(self,data):
-        # Pour debug
+    def db_delete(self,dbname):
         try:
-            self.client.drop_database('tmp_mini')
+            self.client.drop_database(dbname)
         except:
             pass
+
+    def add(self,data):
         self.collection.insert_many(data)
 

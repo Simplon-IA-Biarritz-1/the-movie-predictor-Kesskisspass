@@ -12,6 +12,7 @@ batch_size = 100
 # Nom de la database
 dbname = 'tmp_mini'
 
+
 # On regarde le dossier tsv et on récupère la liste des noms
 # des fichiers (pour le nom des collections MongoDB)
 list_files = [glob.glob(data_path)]
@@ -62,6 +63,8 @@ for name in list_names:
         # print(len(list_db))
         # On crée une connexion à MongoDB en créant une collection identique au nom du fichier
         database = DB(dbname,name)
+
+        # On ajoute nos données
         database.add(list_db)
         list_db = []
 
