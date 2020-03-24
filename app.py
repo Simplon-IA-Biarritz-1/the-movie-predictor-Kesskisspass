@@ -1,6 +1,7 @@
 import glob
 from tsv import TSV
 from db import DB
+from datatype import NAME_BASICS
 
 # On met le chemin vers les fichiers tsv_extract (pour test) dans une variable
 data_path = "./tsv_extract/*.tsv"
@@ -22,8 +23,13 @@ for name in list_names:
     liste_dic = tsv.read_seq()
 
     # On nettoie les données avant de les envoyer en BDD
+    for dico in liste_dic:
+        if (name == 'name.basics.extract'):
+            dic = NAME_BASICS(dico)
+            print(dic.birthYear)
+
 
     # On crée une connexion à MongoDB en créant une collection identique au nom du fichier
-    database = DB('tmp_mini',name)
-    database.add(liste_dic)
-    liste_dic = []
+    # database = DB('tmp_mini',name)
+    # database.add(liste_dic)
+    # liste_dic = []
